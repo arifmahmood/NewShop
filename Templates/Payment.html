@@ -155,7 +155,10 @@ tr:nth-child(even) {
 }
 
 </style>
+        <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 </head>
+
 
 <body style="background-color: #E4E4E0">
 
@@ -164,40 +167,109 @@ tr:nth-child(even) {
 		<strong>পেমেন্ট</strong></div>
 </form>
 
-<form action="" method="post" style="border-radius:3px; width: 680px; height: 374px; top: 60px; position: absolute; background-color: #FFFFFF; left: 10px;">
+<form id="mainForm" action="" method="post" style="border-radius:3px; width: 680px; height: 374px; top: 60px; position: absolute; background-color: #FFFFFF; left: 10px;">
+	{% csrf_token %}
 		<div id="layer2" style="position: absolute; width: 162px; height: 49px; z-index: 2; left: 36px; top: 5px; right: 902px;">
-			<button class="button"><span>মূল পাতা</span>
+			<button class="button" onclick="location.href ='/home'"><span>মূল পাতা</span>
 			</button>
 		</div>
 		<div id="layer1" style="position: absolute; width: 143px; height: 49px; z-index: 1; left: 501px; top: 5px">
-			<button class="button"><span>লগ আউট</span>
+			<button class="button" onclick="location.href ='/logout'"><span>লগ আউট</span>
 			</button>
 		</div>
+
 		
 		<div id="layer1" style="position: absolute; width: 90px; height: 51px; z-index: 1; left: 374px; top: 4px; right: 216px;">
-			<input name="btnDone" type="button" value="সেভ" class="button1" style="width: 77px"/>
+			<input name="btnDone" type="button" onclick="location.href ='/payment'" value="সেভ" class="button1" style="width: 77px"/>
 		</div>
 		
 		
 		<div id="layer1" style="position: absolute; width: 153px; height: 51px; z-index: 1; left: 210px; top: 5px">
-			<input name="btnAdd" onclick="myFunction()" type="button" value="নতুন রেকর্ড" class="button1" style="width: 146px"/>
+			<input name="addButton" id="addButton"  type="button" value="নতুন রেকর্ড" class="button1" style="width: 146px"/>
 		</div>
+        <script>
+
+		function addNew()
+		{
+
+                event.preventDefault();
+                var fail = false;
+                var fail_log = '';
+                $( '#mainForm' ).find( 'select, textarea, input' ).each(function(){
+                    if( ! $( this ).prop( 'required' )){}
+                    else {
+                        if ( ! $( this ).val() ) {
+                            fail = true;
+                            name = $( this ).attr( 'name' );
+                            fail_log += name + " is required \n";
+                        }
+                    }
+
+
+                });
+
+                if ( ! fail )
+                {
+                    $.ajax({
+                    url: '/ajax/addNewPayment/',
+                    type: "POST",
+                    data: {
+
+                        'date': document.getElementById('date').value,
+                        'party': document.getElementById('selectParty').value,
+                        'address': document.getElementById('address').value,
+                        'others': document.getElementById('others').value,
+                        'amount': document.getElementById('amount').value
+
+
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        if(data.isSuccessful)
+                        {
+
+                            alert("saved successfully.");
+
+
+                        }
+                        else
+                        {
+                            alert("Falied to save.");
+                        }
+                    }
+                  });
+                }
+                else
+                {
+                    alert( fail_log );
+                }
+         }
+
+        </script>
+
 		
 		<fieldset style="border: thin solid #000000; height: 270px; width: 299px; position: absolute; left:170px; top: 62px;">
-			<label for="dtpSale" style="width: 100px">তারিখ</label><label for="dtpSale" style="width: 10px"><strong>:</strong></label><input type="Date" name="dtpSale" style= "width: 140px; height: 20px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px"/>
-			<label for="slctSR" style="width: 100px">পার্টি/সাপ্লাইয়ার</label><label for="slctSR" style="width: 10px"><strong>:</strong></label><select name="slctSR" style= "width: 180px; height: 35px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right">
-				<option>Rofiqul</option>
-				<option>Moksed</option>
-			</select>
-			<label for="slctParty" style="width:100px">নাম</label><label for="slctParty" style="width: 10px"><strong>:</strong></label><select name="slctParty" style="width: 180px; height: 35px; border-radius: 2px; background:#E8E8E1; padding: 5px; margin-bottom: 5px">
-				<option>Md. Nazrul Islam</option>
-				<option>M/s Noor Bros.</option>
+			<label for="dtpSale" style="width: 100px">তারিখ</label><label for="dtpSale" style="width: 10px"><strong>:</strong></label>
+			<input type="Date" id="date" required name="dtpSale" style= "width: 140px; height: 20px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px" />
+			<label for="slctSR" style="width: 100px">পার্টি/সাপ্লাইয়ার</label><label for="slctSR" style="width: 10px"><strong>:</strong></label>
+			<select id="selectParty" name="slctSR" required style= "width: 180px; height: 35px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right">
+				<option value="n_1">None</option>
+				{% for i in CUSTOMER %}
+				<option value="c_{{i.id}}">{{i.name}}</option>
+				{% endfor %}
+				{% for i in SUPPLIER %}
+				<option value="s_{{i.id}}">{{i.name}}</option>
+				{% endfor %}
 			</select>
 			<p class="AlignToTextArea" style="margin-bottom: 0; margin-top: 0">
-			<label for="txtaddress" style="width: 100px">ঠিকানা</label><label for="txtaddress" style="width: 10px"><strong>:</strong></label><textarea rows="4" name="txtAddress" style= "width: 170px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; display: inline-block"> </textarea>
+			<label for="txtaddress" style="width: 100px">ঠিকানা</label><label for="txtaddress" style="width: 10px"><strong>:</strong></label>
+                <textarea rows="4" id="address" name="txtAddress" required style= "width: 170px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; display: inline-block"> </textarea>
 			</p>
-			<label for="txtTotal" style="width: 100px">অন্যান্য</label><label for="txtTotal" style="width: 10px"><strong>:</strong></label><input name="txtUnit" style="width: 170px; height: 20px; border-radius: 2px; background:#E8E8E1; padding: 5px; margin-bottom: 5px"/>
-			<label for="txtDiscount" style="width: 100px">টাকা</label><label for="txtDiscount" style="width: 10px"><strong>:</strong></label><input type="number" name="txtFree" style="width: 170px; height: 20px; border-radius: 2px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right; font-family: SutonnyMJ"/>
+			<label for="txtTotal" style="width: 100px">অন্যান্য</label><label for="txtTotal" style="width: 10px"><strong>:</strong></label>
+            <input id="others" name="txtUnit" required style="width: 170px; height: 20px; border-radius: 2px; background:#E8E8E1; padding: 5px; margin-bottom: 5px"/>
+			<label for="txtDiscount" style="width: 100px">টাকা</label><label for="txtDiscount" style="width: 10px"><strong>:</strong></label>
+            <input id="amount" type="number" required name="txtFree" style="width: 170px; height: 20px; border-radius: 2px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right; font-family: SutonnyMJ"/>
 			
 		</fieldset>
 		

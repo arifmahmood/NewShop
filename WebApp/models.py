@@ -116,6 +116,15 @@ class PurchaseMemo(models.Model):
     def getTotal(self):
         return sum(i.itemTotal() for i in self.purchaseItem.all())
 
+class Payment(models.Model):
+    date = models.DateField()
+    partyType = models.IntegerField(default=0)
+    partyId = models.IntegerField(default=-1)
+    name = models.CharField(max_length=50)
+    address = models.CharField(max_length=200)
+    others = models.CharField(max_length=200)
+    amount = models.DecimalField(max_digits=10, decimal_places=2,default=0, blank=True, null=True)
+
 
 
 

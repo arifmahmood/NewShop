@@ -6,7 +6,7 @@ from django.template.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 
 from WebApp.models import Item, Customer, Supplier, SaleMemo, SalesRepresentative, SaleItem, PurchaseMemo, PurchaseItem, \
-    ReturnSaleMemo
+    ReturnSaleMemo, Payment
 
 
 @csrf_exempt
@@ -546,4 +546,34 @@ def forPrintLoadMemoObject(request):
         }
 
 
+    return JsonResponse(data)
+
+@csrf_exempt
+def addNewPayment(request):
+    t, id = request.POST.get('selectParty', 'n_1').split('_')
+    if t is not 'n':
+        partyType = t
+        partyId = id
+        name = request.POST.get('name','')
+        address = request.POST.get('address','')
+        others = request.POST.get('others','')
+        amount = request.POST.get('amount','0')
+        date= request.POST.get('date','')
+        paymentObject = Payment(partyType=partyType,partyId=partyId,date=date,name=name,amount=amount,address=address,others=others)
+        paymentObject.save()
+        data = {
+            'isSuccessful': True,
+        }
+        return JsonResponse(data)
+    name = request.POST.get('name', '')
+    address = request.POST.get('address', '')
+    others = request.POST.get('others', '')
+    amount = request.POST.get('amount', '0')
+    date = request.POST.get('date', '')
+    paymentObject = Payment( date=date, name=name, amount=amount, address=address,
+                            others=others)
+    paymentObject.save()
+    data = {
+        'isSuccessful': True,
+    }
     return JsonResponse(data)

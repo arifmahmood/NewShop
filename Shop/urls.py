@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from WebApp import LoginManagementViews, ItemManagementViews, Ajax, SupplierAndCustomerManagementView, SaleView, \
-    ReportManagement, ReturnManagementView
+    ReportManagement, ReturnManagementView, Payment
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^ajax/salesReturnAddNewDetails/$', Ajax.salesReturnAddNewDetails, name='salesReturnAddNewDetails'),
     url(r'^ajax/returnSaveMemo/$', Ajax.returnSaveMemo, name='returnSaveMemo'),
     url(r'^ajax/returnLoadMemoObject/$', Ajax.forPrintLoadMemoObject, name='returnLoadMemoObject'),
+    url(r'^ajax/addNewPayment/$', Ajax.addNewPayment, name='returnLoadMemoObject'),
 
     # ------------default  and logout ------------
     url(r'^$', LoginManagementViews.showHomePage, name='login'),
@@ -78,5 +79,7 @@ urlpatterns = [
     url(r'^report/listOfCustomers/$',ReportManagement.listOfCustomers, name='listOfCustomers'),
     url(r'^report/listOfSupplier/$',ReportManagement.listOfSupplier, name='listOfSupplier'),
     url(r'^report/listOfProduct/$',ReportManagement.listOfProduct, name='listOfProduct'),
+#---------------------------payment----------------------
+    url(r'^payment/$', Payment.payment, name='payment'),
 
 ]
