@@ -195,7 +195,7 @@ tr:nth-child(even) {
 			 </table>
 	
 		<div style="position: absolute;  left: 9px; width:917px; top: 40px;">
-			<table style="; overflow: auto; table-layout: fixed;" class="Table">
+			<table style=" overflow: auto; table-layout: fixed;" class="Table">
 				{% for i in OBJECT.saleItem.all %}
 			  	<tr>
 			    <td class="auto-style3">{{i.item.itemName}}</td>
@@ -206,6 +206,11 @@ tr:nth-child(even) {
 			    <td class="auto-style3" >{{i.total}}</td>
 			  </tr>
 				{% endfor %}
+
+
+			</table>
+
+			<table bordersize="0">
 				<tr>
 			    <td class="auto-style3"></td>
 			    <td class="auto-style3"></td>

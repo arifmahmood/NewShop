@@ -167,28 +167,46 @@ tr:nth-child(even) {
 
 <body style="background-color: #E4E4E0">
 
-<form action="/report/sale/" method="post" style="border-radius:3px; width: 1100px; height: 130px; top: 10px; position: absolute; background-color: #666699; left: 0px;">
+<form action="/report/sale/" method="post" style="border-radius:3px; width: 1100px; height: 250px; top: 10px; position: absolute; background-color: #666699; left: 0px;">
 	{% csrf_token %}
 	<div class="auto-style1">
 		রং বিপণী</div>
 	<div class="auto-style1">
 		বিক্রয় রিপোর্ট</div>
-		<div style="position:absolute; width: 400px; left:380px;">
+	<div style="position:absolute; width: 400px; left:340px; top: 80px;">
+
+			<input type="checkbox" name="dateFilter" id="dateFilter"/>
 			<span class="auto-style4">
 			<label for="txtMemo">হইতে</label><label for="txtFrom" style="width: 10px"><strong>:</strong></label></span>
-			<input type="Date" required id="dateFrom" name="dateFrom" style= "width: 100px; height: 20px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right"/>
-			<span class="auto-style4">
-			<label for="txtMemo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; পর্যন্ত</label><label for="txtTo" style="width: 10px"><strong>:</strong></label></span>
-			<input type="Date" required  id="dateTo" name="dateTo" style= "width: 100px; height: 20px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right;"/>
+        <input type="Date"  id="dateFrom" name="dateFrom"
+               style="width: 100px; height: 20px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right"/>
+        <span class="auto-style4">
+			<label for="txtMemo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; পর্যন্ত</label><label for="txtTo"
+                                                                                                        style="width: 10px"><strong>:</strong></label></span>
+        <input type="Date"  id="dateTo" name="dateTo"
+               style="width: 100px; height: 20px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right;"/>
 
-		</div>
-        <div style="position:absolute; width: 100px; left:720px;">
-            <button class="button1" type="submit" id="filterButton" name="filterButton" value="filterButton" style= "width: 100px; height: 20px;">ফিল্টার</button>
-        </div>
-        <div style="position:absolute; width: 100px; left:850px;">
-            <button class="button1" type="button" id="printButton" onclick="hide()" name="filterButton" value="filterButton" style= "width: 100px; height: 20px;">প্রিন্ট</button>
 
-        </div>
+    </div>
+    <div style="position:absolute; width: 400px; left:380px;top:120px;">
+        <input type="checkbox" name="nameFilter" id="nameFilter"/>
+        <select id="selectParty" name="selectParty" required style= "width: 180px; height: 35px; border-radius: 3px; background:#E8E8E1; padding: 5px; margin-bottom: 5px; text-align: right">
+				<option value="n">None</option>
+				{% for i in NAME %}
+				<option value="{{i.id}}">{{i.name}}</option>
+				{% endfor %}
+			</select>
+    </div>
+    <div style="position:absolute; width: 100px; left:850px;">
+        <button class="button1" type="submit" id="filterButton" name="filterButton" value="filterButton"
+                style="width: 100px; height: 20px;">ফিল্টার
+        </button>
+        <button class="button1" type="button" id="printButton" onclick="hide()" name="filterButton" value="filterButton"
+                style="width: 100px; height: 20px;">প্রিন্ট
+        </button>
+
+    </div>
+
         <script>
             function hide()
         {
